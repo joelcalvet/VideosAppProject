@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@ionic/vue": "^8.5.2",
+    "@ionic/vue-router": "^8.5.2",
+    "axios": "^1.8.4",
+    "bootstrap": "^5.3.3",
+    "filepond-plugin-file-validate-type": "^1.2.9",
+    "filepond-plugin-image-preview": "^4.6.12",
+    "vue-filepond": "^7.0.4"
+  }
+}
