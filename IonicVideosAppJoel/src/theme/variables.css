@@ -1,0 +1,54 @@
+:root {
+    --ion-color-primary: #1e90ff;
+    --ion-color-primary-contrast: #ffffff;
+    --ion-background-color: #1a1a1a;
+    --ion-text-color: #ffffff;
+    --ion-card-background: #2a2a2a;
+    --ion-card-color: #ffffff;
+    --ion-button-background: #ff4500;
+    --ion-button-color: #ffffff;
+}
+
+ion-tab-bar {
+    --background: #2a2a2a;
+    --color: #ffffff;
+    --color-selected: #ff4500;
+}
+
+ion-content {
+    --background: var(--ion-background-color);
+}
+
+ion-card {
+    background: var(--ion-card-background);
+    color: var(--ion-card-color);
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    max-width: 600px;
+    margin: 10px auto;
+}
+
+ion-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+ion-button {
+    --background: var(--ion-button-background);
+    --color: var(--ion-button-color);
+    --border-radius: 10px;
+    --padding-start: 20px;
+    --padding-end: 20px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+ion-input, ion-textarea, ion-select {
+    --background: #333333;
+    --color: #ffffff;
+    --padding-start: 15px;
+    --padding-end: 15px;
+    --border-radius: 8px;
+    margin-bottom: 15px;
+}
