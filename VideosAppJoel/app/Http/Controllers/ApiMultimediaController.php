@@ -49,14 +49,24 @@ class ApiMultimediaController extends Controller
 
     public function update(Request $request, Multimedia $multimedia)
     {
-        // Valida les dades per actualitzar
         $request->validate([
             'title' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
+            'file' => 'nullable|file|mimes:jpg,jpeg,png,gif,mp4|max:10240', // Permet fitxer opcional
         ]);
 
-        // Actualitza només els camps proporcionats
-        $multimedia->update($request->only(['title', 'description']));
+        // Si hi ha un fitxer nou, elimina l'antic i puja el nou
+        if ($request->hasFile('file')) {
+            Storage::disk('public')->delete($multimedia->path); // Elimina el fitxer antic
+            $path = $request->file('file')->store('multimedia', 'public');
+            $multimedia->path = $path;
+        }
+
+        // Actualitza el títol si es proporciona
+        if ($request->filled('title')) {
+            $multimedia->title = $request->title;
+        }
+
+        $multimedia->save();
 
         return response()->json($multimedia);
     }

@@ -1,15 +1,14 @@
 <?php
 
-namespace Tests\Unit;
+namespace Feature\Api;
 
-use PHPUnit\Framework\Attributes\Test;
-use Tests\TestCase;
 use App\Helpers\MultimediaHelper;
 use App\Models\User;
-use App\Models\Multimedia;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class ApiMultimediaTest extends TestCase
 {
