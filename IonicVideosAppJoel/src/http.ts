@@ -1,7 +1,7 @@
 import Axios from 'axios';
 
 const api = Axios.create({
-    baseURL: 'http://localhost:8000/api', // Substitueix per la teva IP
+    baseURL: 'http://localhost:8000/api',
 });
 
 api.interceptors.request.use((config: any) => {
