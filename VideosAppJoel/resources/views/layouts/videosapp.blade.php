@@ -11,7 +11,7 @@
             background-color: #f8f9fa;
             font-family: Arial, sans-serif;
             margin: 0;
-            min-height: 100vh; /* Assegura que el body ocupi almenys l'alçada de la finestra */
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
@@ -27,11 +27,11 @@
             color: #cccccc !important;
         }
         main {
-            flex: 1 0 auto; /* Fa que el contingut principal ocupi l'espai restant */
-            padding-bottom: 70px; /* Espai per al footer fix */
+            flex: 1 0 auto;
+            padding-bottom: 70px;
         }
         .footer {
-            flex-shrink: 0; /* Evita que el footer es redueixi */
+            flex-shrink: 0;
             position: fixed;
             bottom: 0;
             width: 100%;
@@ -65,9 +65,13 @@
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item"><a class="nav-link" href="{{ route('videos.index') }}">Vídeos</a></li>
                 @auth
-                    <li class="nav-item"><a class="nav-link" href="{{ route('users.index') }}">Usuaris</a></li> <!-- Afegit aquí -->
+                    <li class="nav-item"><a class="nav-link" href="{{ route('series.index') }}">Sèries</a></li> <!-- Enllaç a sèries públiques -->
+                    <li class="nav-item"><a class="nav-link" href="{{ route('users.index') }}">Usuaris</a></li>
                     @can('manage videos')
-                        <li class="nav-item"><a class="nav-link" href="{{ route('videos.manage.index') }}">Gestionar</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('videos.manage.index') }}">Gestionar Vídeos</a></li>
+                    @endcan
+                    @can('manage series')
+                        <li class="nav-item"><a class="nav-link" href="{{ route('series.manage.index') }}">Gestionar Sèries</a></li> <!-- Enllaç a gestió de sèries -->
                     @endcan
                     @can('manage users')
                         <li class="nav-item"><a class="nav-link" href="{{ route('users.manage.index') }}">Gestionar Usuaris</a></li>

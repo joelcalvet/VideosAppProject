@@ -26,6 +26,17 @@
                             <label for="password" class="form-label text-gray-800">Contrasenya (opcional)</label>
                             <input type="password" name="password" id="password" class="form-control" data-qa="user-password">
                         </div>
+                        <!-- Selector de permisos -->
+                        <div class="mb-3">
+                            <label class="form-label text-gray-800">Permisos</label>
+                            @foreach ($permissions as $permission)
+                                <div class="form-check">
+                                    <input type="checkbox" name="permissions[]" id="permission-{{ $permission->id }}" value="{{ $permission->name }}"
+                                           {{ $user->hasPermissionTo($permission->name) ? 'checked' : '' }} class="form-check-input" data-qa="permission-{{ $permission->name }}">
+                                    <label for="permission-{{ $permission->id }}" class="form-check-label">{{ $permission->name }}</label>
+                                </div>
+                            @endforeach
+                        </div>
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary">Actualitzar</button>
                         </div>

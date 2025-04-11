@@ -25,6 +25,9 @@ class UserHelper
         if (!$user->hasPermissionTo('manage users')) {
             $user->givePermissionTo('manage users');
         }
+        if (!$user->hasPermissionTo('manage series')) {
+            $user->givePermissionTo('manage series');
+        }
 
         return $user;
     }
@@ -100,6 +103,9 @@ class UserHelper
             }
             if (!$teacher->hasPermissionTo('manage users')) {
                 $teacher->givePermissionTo('manage users');
+            }
+            if (!$teacher->hasPermissionTo('manage series')) {
+                $teacher->givePermissionTo('manage series');
             }
 
             return $teacher;

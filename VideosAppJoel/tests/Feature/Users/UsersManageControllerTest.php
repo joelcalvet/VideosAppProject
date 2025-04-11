@@ -77,10 +77,14 @@ class UsersManageControllerTest extends TestCase
             'name' => 'New User',
             'email' => 'newuser@example.com',
             'password' => 'password123',
+            'permissions' => ['manage users'],
         ]);
 
         $response->assertRedirect(route('users.manage.index'));
         $this->assertDatabaseHas('users', ['email' => 'newuser@example.com']);
+        $newUser = User::where('email', 'newuser@example.com')->first();
+        $this->assertDatabaseHas('teams', ['user_id' => $newUser->id, 'name' => 'New User Team', 'personal_team' => true]);
+        $this->assertTrue($newUser->hasPermissionTo('manage users'));
     }
 
     public function test_user_without_permissions_cannot_store_users()
@@ -166,10 +170,12 @@ class UsersManageControllerTest extends TestCase
         $response = $this->actingAs($user)->put("users/manage/{$targetUser->id}", [
             'name' => 'Updated Name',
             'email' => 'target@example.com',
+            'permissions' => ['manage videos'],
         ]);
 
         $response->assertRedirect(route('users.manage.index'));
         $this->assertDatabaseHas('users', ['id' => $targetUser->id, 'name' => 'Updated Name']);
+        $this->assertTrue($targetUser->fresh()->hasPermissionTo('manage videos'));
     }
 
     public function test_user_without_permissions_cannot_update_users()

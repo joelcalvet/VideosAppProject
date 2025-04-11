@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Serie;
 use App\Models\Video;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,8 @@ class VideosController extends Controller
 
     public function create()
     {
-        return view('videos.create');
+        $series = Serie::all(); // Carreguem totes les sèries
+        return view('videos.create', compact('series'));
     }
 
     public function store(Request $request)
@@ -25,6 +27,7 @@ class VideosController extends Controller
             'description' => 'nullable|string',
             'url' => 'required|url',
             'published_at' => 'nullable|date',
+            'serie_id' => 'nullable|exists:series,id',
         ]);
 
         Video::create(array_merge($validated, [
@@ -43,7 +46,8 @@ class VideosController extends Controller
     public function edit($id)
     {
         $video = Video::findOrFail($id);
-        return view('videos.edit', compact('video'));
+        $series = Serie::all(); // Carreguem totes les sèries
+        return view('videos.edit', compact('video', 'series'));
     }
 
     public function update(Request $request, $id)
@@ -53,6 +57,7 @@ class VideosController extends Controller
             'description' => 'nullable|string',
             'url' => 'required|url',
             'published_at' => 'nullable|date',
+            'serie_id' => 'nullable|exists:series,id',
         ]);
 
         $video = Video::findOrFail($id);

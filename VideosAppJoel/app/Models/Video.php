@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Video extends Model
 {
@@ -21,13 +23,17 @@ class Video extends Model
         'published_at',
         'previous',
         'next',
-        'series_id',
+        'serie_id',
         'user_id',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function series(): BelongsToMany
+    {
+        return $this->belongsToMany(Serie::class, 'serie_video', 'serie_id', 'video_id');
     }
 
     public function getFormattedPublishedAtAttribute()

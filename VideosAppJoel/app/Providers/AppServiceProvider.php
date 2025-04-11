@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Serie;
 use App\Models\User;
+use App\Policies\SeriesPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -17,7 +19,7 @@ class AppServiceProvider extends ServiceProvider
     }
 
     protected $policies = [
-        // Ho deixo buit perquè m'has dit que tenia que ser així
+        Serie::class => SeriesPolicy::class,
     ];
 
     function define_gates()
@@ -27,6 +29,9 @@ class AppServiceProvider extends ServiceProvider
         });
         Gate::define('manage-users', function (User $user) {
             return $user->hasPermissionTo('manage users') || $user->isSuperAdmin();
+        });
+        Gate::define('manage-series', function (User $user) {
+            return $user->hasPermissionTo('manage series') || $user->isSuperAdmin();
         });
     }
 

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Helpers\SeriesHelper;
 use App\Helpers\TeamHelper;
 use App\Helpers\UserHelper;
 use App\Helpers\VideoHelper;
@@ -35,5 +36,7 @@ class DatabaseSeeder extends Seeder
         TeamHelper::addpersonalteam($superAdmin);
         TeamHelper::addpersonalteam($regularUser);
         TeamHelper::addpersonalteam($videoManager);
+
+        SeriesHelper::create_series();
     }
 }
