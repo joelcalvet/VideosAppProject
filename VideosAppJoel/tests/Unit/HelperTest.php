@@ -21,6 +21,7 @@ class HelperTest extends TestCase
         // Crear permisos necessaris abans de cada test
         Permission::firstOrCreate(['name' => 'manage videos']);
         Permission::firstOrCreate(['name' => 'manage users']);
+        Permission::firstOrCreate(['name' => 'manage series']);
     }
 
     #[\PHPUnit\Framework\Attributes\Test]

@@ -315,3 +315,55 @@
 - **Tests:** Afegits i corregits tests per assegurar la funcionalitat del CRUD d’usuaris i la integració amb vídeos.
 
 ---
+
+### Descripció del 6è Sprint:
+
+En aquest sprint, he treballat en les següents tasques per avançar en el desenvolupament del projecte VideosApp:
+
+- **Correcció d’errors del 5è sprint:** He revisat i corregit els errors detectats al sprint anterior per assegurar-me que l’aplicació funcioni correctament.
+- **Correcció de tests:** Quan he modificat el codi, alguns tests de sprints anteriors han fallat, així que els he arreglat per mantenir la integritat del projecte.
+- **Modificació dels vídeos:** He actualitzat el sistema per permetre assignar vídeos a sèries, implementant la relació necessària.
+- **Creació de vídeos per a usuaris regulars:** He afegit les funcions del CRUD (create, read, update, delete) al `VideoController` perquè els usuaris regulars puguin crear vídeos. També he afegit botons per al CRUD a la vista de vídeos.
+- **Migració de sèries:** He creat la migració per a la taula `series` amb els camps `id`, `title`, `description`, `image` (nullable), `user_name`, `user_photo_url` (nullable) i `published_at` (nullable).
+- **Model de sèries:** He desenvolupat el model `Serie` amb les funcions `testedby`, `videos` (per a la relació 1:N), `getFormattedCreatedAtAttribute()`, `getFormattedForHumansCreatedAtAttribute()` i `getCreatedAtTimestampAttribute()`.
+- **Relació 1:N als vídeos:** He afegit la relació 1:N al model `Video` per connectar-lo amb les sèries.
+- **SeriesManageController:** He creat el controlador `SeriesManageController` amb les funcions `testedby`, `index`, `store`, `edit`, `update`, `delete` i `destroy` per gestionar les sèries.
+- **SeriesController:** He implementat el controlador `SeriesController` amb les funcions `index` i `show` per mostrar les sèries.
+- **Funció create_series() a Helpers:** He afegit la funció `create_series()` al fitxer de helpers, creant tres sèries inicials per al sistema.
+- **Vistes per al CRUD de sèries:** He creat les següents vistes, accessibles només per als usuaris amb permisos:
+    - `resources/views/series/manage/index.blade.php`
+    - `resources/views/series/manage/create.blade.php`
+    - `resources/views/series/manage/edit.blade.php`
+    - `resources/views/series/manage/delete.blade.php`
+- **Vista index.blade.php:** He afegit una taula per al CRUD de sèries a la vista `index.blade.php`.
+- **Vista create.blade.php:** He creat un formulari per afegir sèries, utilitzant l’atribut `data-qa` per facilitar l’identificació en els tests.
+- **Vista edit.blade.php:** He afegit una taula per al CRUD de sèries a la vista d’edició.
+- **Vista delete.blade.php:** He implementat una confirmació per a l’eliminació de sèries, incloent l’opció de desassignar els vídeos associats en lloc d’eliminar-los.
+- **Vista series/index.blade.php:** He creat la vista `resources/views/series/index.blade.php`, que mostra totes les sèries, permet buscar-les i, al clicar en una sèrie, mostra els vídeos associats.
+- **Permisos de gestió de sèries:** He afegit els permisos per al CRUD de sèries al fitxer de helpers i els he assignat als usuaris superadmin.
+- **Tests a SerieTest:** He creat la funció `serie_have_videos()` al fitxer `tests/Unit/SerieTest.php` per verificar la relació entre sèries i vídeos.
+- **Tests a SeriesManageControllerTest:** He implementat les següents funcions al fitxer `SeriesManageControllerTest`:
+    - `loginAsVideoManager`
+    - `loginAsSuperAdmin`
+    - `loginAsRegularUser`
+    - `user_with_permissions_can_see_add_series`
+    - `user_without_series_manage_create_cannot_see_add_series`
+    - `user_with_permissions_can_store_series`
+    - `user_without_permissions_cannot_store_series`
+    - `user_with_permissions_can_destroy_series`
+    - `user_without_permissions_cannot_destroy_series`
+    - `user_with_permissions_can_see_edit_series`
+    - `user_without_permissions_cannot_see_edit_series`
+    - `user_with_permissions_can_update_series`
+    - `user_without_permissions_cannot_update_series`
+    - `user_with_permissions_can_manage_series`
+    - `regular_users_cannot_manage_series`
+    - `guest_users_cannot_manage_series`
+    - `videomanagers_can_manage_series`
+    - `superadmins_can_manage_series`
+- **Rutes de sèries:** He creat les rutes per al CRUD de `series/manage` amb el middleware corresponent (`auth` i `can:manage series`). També he afegit les rutes per a l’índex i el show de sèries, visibles només per a usuaris autenticats.
+- **Navegació:** He implementat la navegació entre pàgines per garantir una experiència d’usuari fluida.
+- **Documentació a terms:** He afegit una descripció del que he fet en aquest sprint a `resources/markdown/terms`.
+- **Comprovació amb Larastan:** He verificat tots els fitxers creats amb **Larastan** per assegurar-me que no hi ha errors d’anàlisi estàtica.
+
+---

@@ -52,6 +52,13 @@ class User extends Authenticatable
         return $this->hasMany(Team::class);
     }
 
+    // app/Models/User.php
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin'; // Adjust based on your application's role logic
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

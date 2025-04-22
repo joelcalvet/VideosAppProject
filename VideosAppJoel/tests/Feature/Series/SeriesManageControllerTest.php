@@ -6,6 +6,7 @@ use App\Http\Controllers\SeriesManageController;
 use App\Models\Serie;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Permission;
 use Tests\TestCase;
 
 class SeriesManageControllerTest extends TestCase
@@ -16,41 +17,69 @@ class SeriesManageControllerTest extends TestCase
     {
         parent::setUp();
         $this->artisan('migrate');
+        Permission::firstOrCreate(['name' => 'manage series']);
+        Permission::firstOrCreate(['name' => 'manage videos']);
+        Permission::firstOrCreate(['name' => 'manage users']);
     }
 
     // Funcions d'ajuda per autenticació
     protected function loginAsVideoManager()
     {
-        // Els "video managers" tenen nom "Admin" per tenir permís
-        $user = User::create([
-            'name' => 'Admin', // Coincideix amb SeriesHelper
-            'email' => 'manager@example.com',
-            'password' => bcrypt('password'),
-        ]);
+        $user = User::firstOrCreate(
+            ['email' => 'videomanager@videosapp.com'],
+            [
+                'name' => 'Video Manager',
+                'password' => bcrypt('password'),
+            ]
+        );
+
+        // Assignar permís segons UserHelper
+        if (!$user->hasPermissionTo('manage series')) {
+            $user->givePermissionTo('manage series');
+        }
+
         $this->actingAs($user);
         return $user;
     }
 
     protected function loginAsSuperAdmin()
     {
-        // Els "superadmins" també tenen nom "Admin" per tenir permís
-        $user = User::create([
-            'name' => 'Admin', // Coincideix amb SeriesHelper
-            'email' => 'admin@example.com',
-            'password' => bcrypt('password'),
-        ]);
+        $user = User::firstOrCreate(
+            ['email' => 'superadmin@videosapp.com'],
+            [
+                'name' => 'Super Admin',
+                'password' => bcrypt('password'),
+            ]
+        );
+
+        // Assignar permisos segons UserHelper
+        if (!$user->hasPermissionTo('manage series')) {
+            $user->givePermissionTo('manage series');
+        }
+        if (!$user->hasPermissionTo('manage videos')) {
+            $user->givePermissionTo('manage videos');
+        }
+        if (!$user->hasPermissionTo('manage users')) {
+            $user->givePermissionTo('manage users');
+        }
+
         $this->actingAs($user);
         return $user;
     }
 
     protected function loginAsRegularUser()
     {
-        // Usuari regular amb un nom diferent a "Admin"
-        $user = User::create([
-            'name' => 'Regular User',
-            'email' => 'user@example.com',
-            'password' => bcrypt('password'),
-        ]);
+        $user = User::firstOrCreate(
+            ['email' => 'regularuser@videosapp.com'],
+            [
+                'name' => 'Regular User',
+                'password' => bcrypt('password'),
+            ]
+        );
+
+        // Assegurar que no té permisos
+        $user->syncPermissions([]);
+
         $this->actingAs($user);
         return $user;
     }
@@ -121,7 +150,7 @@ class SeriesManageControllerTest extends TestCase
         $serie = Serie::create([
             'title' => 'Test Series',
             'description' => 'A test series',
-            'user_name' => 'Admin', // Simula una sèrie creada per un usuari amb permís
+            'user_name' => 'Admin',
         ]);
 
         $response = $this->delete(route('series.manage.destroy', $serie->id));
@@ -217,7 +246,7 @@ class SeriesManageControllerTest extends TestCase
     public function test_guest_users_cannot_manage_series()
     {
         $response = $this->get(route('series.manage.index'));
-        $response->assertRedirect(route('login')); // Ajustat per esperar 302
+        $response->assertRedirect(route('login')); // Correcte per 'auth'
     }
 
     public function test_videomanagers_can_manage_series()
