@@ -1,12 +1,15 @@
 <?php
 
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\UsersManageController;
 use App\Http\Controllers\VideosController;
 use App\Http\Controllers\VideosManageController;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\SeriesManageController;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 
@@ -63,8 +66,8 @@ Route::middleware(['auth', 'can:manage series'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     // Rutes de vídeos
     Route::get('/videos', [VideosController::class, 'index'])->name('videos.index');
-    Route::get('/videos/create', [VideosController::class, 'create'])->name('videos.create');
-    Route::post('/videos', [VideosController::class, 'store'])->name('videos.store');
+    Route::get('/videos/create', [VideosController::class, 'create'])->name('videos.create')->middleware('can:create-videos');
+    Route::post('/videos', [VideosController::class, 'store'])->name('videos.store')->middleware('can:create-videos');
     Route::get('/videos/{video}', [VideosController::class, 'show'])->name('videos.show');
     Route::get('/videos/{id}/edit', [VideosController::class, 'edit'])->name('videos.edit');
     Route::put('/videos/{id}', [VideosController::class, 'update'])->name('videos.update');
@@ -84,7 +87,8 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/series/{id}', [SeriesController::class, 'update'])->name('series.update');
     Route::get('/series/{id}/delete', [SeriesController::class, 'delete'])->name('series.delete');
     Route::delete('/series/{id}', [SeriesController::class, 'destroy'])->name('series.destroy');
-    Route::post('/series/{id}/add-video', [SeriesController::class, 'addVideo'])->name('series.addVideo'); // Nova ruta afegida
+    Route::post('/series/{id}/add-video', [SeriesController::class, 'addVideo'])->name('series.addVideo');
+    Route::delete('/series/{id}/remove-video', [SeriesController::class, 'removeVideo'])->name('series.removeVideo');
 });
 
 // Rutes públiques de vídeos (al final per evitar conflictes)
@@ -92,3 +96,9 @@ Route::get('/videos', [VideosController::class, 'index'])->name('videos.index');
 Route::get('/videos/{video}', [VideosController::class, 'show'])->name('videos.show');
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/notificacions', [NotificationController::class, 'index'])->name('notificacions');
+    Route::post('/notificacions/read/{id}', [NotificationController::class, 'markAsRead'])->name('notificacions.read');
+    Route::post('/notificacions/read-all', [NotificationController::class, 'markAllAsRead'])->name('notificacions.readAll');
+});

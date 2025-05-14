@@ -43,7 +43,9 @@ class UserHelper
             ]
         );
 
-        $user->syncPermissions([]); // Buida tots els permisos si en tenia algun
+        if (!$user->hasPermissionTo('create videos')) {
+            $user->givePermissionTo('create videos');
+        }
 
         return $user;
     }
@@ -64,6 +66,10 @@ class UserHelper
             $user->givePermissionTo('manage videos');
         }
 
+        if (!$user->hasPermissionTo('create videos')) {
+            $user->givePermissionTo('create videos');
+        }
+
         $user->revokePermissionTo('manage users');
 
         return $user;
@@ -79,6 +85,10 @@ class UserHelper
                 'password' => Hash::make(config('users.default.password')),
                 'super_admin' => false,
             ]);
+
+            if (!$user->hasPermissionTo('create videos')) {
+                $user->givePermissionTo('create videos');
+            }
 
             TeamHelper::addPersonalTeam($user);
 

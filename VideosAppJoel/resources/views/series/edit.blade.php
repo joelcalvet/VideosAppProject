@@ -1,3 +1,4 @@
+<!-- resources/views/series/edit.blade.php -->
 @php
     use Carbon\Carbon;
     use Illuminate\Support\Str;
@@ -17,21 +18,21 @@
                         @method('PUT')
                         <div class="mb-3">
                             <label for="title" class="form-label text-gray-800">Títol</label>
-                            <input type="text" name="title" id="title" class="form-control" value="{{ old('title', $serie->title) }}" required>
+                            <input type="text" name="title" id="title" class="form-control" value="{{ old('title', $serie->title) }}" required data-qa="series-title-input">
                             @error('title')
                             <span class="text-danger text-sm">{{ $message }}</span>
                             @enderror
                         </div>
                         <div class="mb-3">
                             <label for="description" class="form-label text-gray-800">Descripció</label>
-                            <textarea name="description" id="description" class="form-control" rows="3">{{ old('description', $serie->description) }}</textarea>
+                            <textarea name="description" id="description" class="form-control" rows="3" data-qa="series-description-input">{{ old('description', $serie->description) }}</textarea>
                             @error('description')
                             <span class="text-danger text-sm">{{ $message }}</span>
                             @enderror
                         </div>
                         <div class="mb-3">
                             <label for="image" class="form-label text-gray-800">Imatge (opcional)</label>
-                            <input type="file" name="image" id="image" class="form-control">
+                            <input type="file" name="image" id="image" class="form-control" data-qa="series-image-input">
                             @if ($serie->image)
                                 <p class="text-sm text-gray-500 mt-2">
                                     Imatge actual: <img src="{{ Storage::url($serie->image) }}" alt="{{ $serie->title }}" style="max-height: 100px;">
@@ -41,15 +42,8 @@
                             <span class="text-danger text-sm">{{ $message }}</span>
                             @enderror
                         </div>
-                        <div class="mb-3">
-                            <label for="published_at" class="form-label text-gray-800">Data de publicació (opcional)</label>
-                            <input type="datetime-local" name="published_at" id="published_at" class="form-control" value="{{ old('published_at', $serie->published_at ? Carbon::parse($serie->published_at)->format('Y-m-d\TH:i') : '') }}">
-                            @error('published_at')
-                            <span class="text-danger text-sm">{{ $message }}</span>
-                            @enderror
-                        </div>
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary">Actualitzar Sèrie</button>
+                            <button type="submit" class="btn btn-primary" data-qa="series-update-button">Actualitzar Sèrie</button>
                             <a href="{{ route('series.show', $serie->id) }}" class="btn btn-secondary">Cancel·lar</a>
                         </div>
                     </form>
@@ -61,7 +55,7 @@
                             @csrf
                             <div class="mb-3">
                                 <label for="video_id" class="form-label text-gray-800">Seleccionar vídeo</label>
-                                <select name="video_id" id="video_id" class="form-control">
+                                <select name="video_id" id="video_id" class="form-control" data-qa="add-video-select">
                                     <option value="">-- Selecciona un vídeo --</option>
                                     @foreach ($availableVideos as $video)
                                         <option value="{{ $video->id }}">{{ Str::limit($video->title, 50) }}</option>
@@ -72,7 +66,7 @@
                                 @enderror
                             </div>
                             <div class="text-center">
-                                <button type="submit" class="btn btn-primary">Afegir vídeo</button>
+                                <button type="submit" class="btn btn-primary" data-qa="add-video-button">Afegir vídeo</button>
                             </div>
                         </form>
 
@@ -85,9 +79,17 @@
                                 @foreach ($serie->videos as $video)
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         {{ Str::limit($video->title, 50) }}
-                                        <span class="text-sm text-gray-500">
-                                            {{ $video->published_at ? Carbon::parse($video->published_at)->diffForHumans() : 'No publicat' }}
-                                        </span>
+                                        <div>
+                                            <span class="text-sm text-gray-500 mr-3">
+                                                {{ $video->published_at ? Carbon::parse($video->published_at)->diffForHumans() : 'No publicat' }}
+                                            </span>
+                                            <form action="{{ route('series.removeVideo', $serie->id) }}" method="POST" style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <input type="hidden" name="video_id" value="{{ $video->id }}">
+                                                <button type="submit" class="btn btn-danger btn-sm" data-qa="remove-video-{{ $video->id }}">Desassignar</button>
+                                            </form>
+                                        </div>
                                     </li>
                                 @endforeach
                             </ul>

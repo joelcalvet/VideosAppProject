@@ -5,7 +5,6 @@
       <sourceFolder url="file://$MODULE_DIR$/VideosAppJoel/app" isTestSource="false" packagePrefix="App\" />
       <sourceFolder url="file://$MODULE_DIR$/VideosAppJoel/database/factories" isTestSource="false" packagePrefix="Database\Factories\" />
       <sourceFolder url="file://$MODULE_DIR$/VideosAppJoel/database/seeders" isTestSource="false" packagePrefix="Database\Seeders\" />
-      <sourceFolder url="file://$MODULE_DIR$/VideosAppJoel/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/VideosAppJoel/tests" isTestSource="true" packagePrefix="Tests\" />
       <excludeFolder url="file://$MODULE_DIR$/VideosAppJoel/vendor/bacon/bacon-qr-code" />
       <excludeFolder url="file://$MODULE_DIR$/VideosAppJoel/vendor/brick/math" />
@@ -129,9 +128,24 @@
       <excludeFolder url="file://$MODULE_DIR$/VideosAppJoel/vendor/vlucas/phpdotenv" />
       <excludeFolder url="file://$MODULE_DIR$/VideosAppJoel/vendor/voku/portable-ascii" />
       <excludeFolder url="file://$MODULE_DIR$/VideosAppJoel/vendor/webmozart/assert" />
+      <excludeFolder url="file://$MODULE_DIR$/VideosAppJoel/vendor/clue/redis-protocol" />
+      <excludeFolder url="file://$MODULE_DIR$/VideosAppJoel/vendor/clue/redis-react" />
+      <excludeFolder url="file://$MODULE_DIR$/VideosAppJoel/vendor/evenement/evenement" />
+      <excludeFolder url="file://$MODULE_DIR$/VideosAppJoel/vendor/laravel/reverb" />
+      <excludeFolder url="file://$MODULE_DIR$/VideosAppJoel/vendor/paragonie/sodium_compat" />
+      <excludeFolder url="file://$MODULE_DIR$/VideosAppJoel/vendor/pusher/pusher-php-server" />
+      <excludeFolder url="file://$MODULE_DIR$/VideosAppJoel/vendor/ratchet/rfc6455" />
+      <excludeFolder url="file://$MODULE_DIR$/VideosAppJoel/vendor/react/cache" />
+      <excludeFolder url="file://$MODULE_DIR$/VideosAppJoel/vendor/react/dns" />
+      <excludeFolder url="file://$MODULE_DIR$/VideosAppJoel/vendor/react/event-loop" />
+      <excludeFolder url="file://$MODULE_DIR$/VideosAppJoel/vendor/react/promise" />
+      <excludeFolder url="file://$MODULE_DIR$/VideosAppJoel/vendor/react/promise-timer" />
+      <excludeFolder url="file://$MODULE_DIR$/VideosAppJoel/vendor/react/socket" />
+      <excludeFolder url="file://$MODULE_DIR$/VideosAppJoel/vendor/react/stream" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="ionic_videos_app_joel" />
+    <orderEntry type="library" name="toastr" level="application" />
   </component>
 </module>

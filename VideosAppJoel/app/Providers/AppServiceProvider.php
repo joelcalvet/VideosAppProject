@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Policies\SeriesPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Notifications\DatabaseNotification;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,6 +33,12 @@ class AppServiceProvider extends ServiceProvider
         });
         Gate::define('manage-series', function (User $user) {
             return $user->hasPermissionTo('manage series') || $user->isSuperAdmin();
+        });
+        Gate::define('create-videos', function (User $user) {
+            return $user->hasPermissionTo('create videos') || $user->isSuperAdmin();
+        });
+        Gate::define('view-notification', function (User $user, DatabaseNotification $notification) {
+            return $notification->notifiable_id === $user->id;
         });
     }
 

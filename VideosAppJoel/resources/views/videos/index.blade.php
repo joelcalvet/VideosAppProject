@@ -8,6 +8,9 @@
 @section('content')
     <div class="container py-4">
         <h1 class="text-2xl font-bold mb-6 text-gray-800 text-center">Llista de Vídeos</h1>
+        @if (auth()->check() && auth()->user()->can('create-videos'))
+            <a href="{{ route('videos.create') }}" class="btn btn-primary mb-3" data-qa="create-video-button">Crear Vídeo</a>
+        @endif
         <div class="row row-cols-1 row-cols-md-3 g-4">
             @forelse ($videos as $video)
                 <div class="col">

@@ -1,6 +1,6 @@
 <?php
 
-namespace Feature\Api;
+namespace tests\Feature\Api;
 
 use App\Helpers\MultimediaHelper;
 use App\Models\User;

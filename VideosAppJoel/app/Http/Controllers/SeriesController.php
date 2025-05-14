@@ -30,9 +30,11 @@ class SeriesController extends Controller
         return view('series.index', compact('series'));
     }
 
+    // app/Http/Controllers/SeriesController.php
     public function create()
     {
-        return view('series.create');
+        $videos = Video::all(); // Carregar tots els vídeos disponibles
+        return view('series.create', compact('videos'));
     }
 
     public function store(Request $request)
@@ -41,17 +43,25 @@ class SeriesController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'image' => 'nullable|image|max:2048',
-            'published_at' => 'nullable|date',
+            'video_ids' => 'nullable|array', // Afegir validació per video_ids
+            'video_ids.*' => 'exists:videos,id', // Cada ID ha d'existir
         ]);
 
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('series', 'public');
         }
 
-        // Afegim user_id i user_name
-        $validated['user_id'] = auth()->id(); // Afegim aquesta línia
+        // Afegim user_id, user_name i published_at automàticament
+        $validated['user_id'] = auth()->id();
         $validated['user_name'] = auth()->user()->name;
-        Serie::create($validated);
+        $validated['published_at'] = now(); // Afegit per al punt 3
+
+        $serie = Serie::create($validated);
+
+        // Assignar vídeos si s'han seleccionat
+        if (!empty($validated['video_ids'])) {
+            $serie->videos()->syncWithoutDetaching($validated['video_ids']);
+        }
 
         return redirect()->route('series.index')
             ->with('success', 'Sèrie creada correctament.');
@@ -131,5 +141,21 @@ class SeriesController extends Controller
 
         return redirect()->route('series.index')
             ->with('success', 'Sèrie eliminada correctament.');
+    }
+
+    public function removeVideo(Request $request, $id)
+    {
+        $serie = Serie::findOrFail($id);
+        if ($serie->user_id !== auth()->id() && !auth()->user()->can('manage series')) {
+            abort(403, 'No tens permís per desassignar vídeos d’aquesta sèrie.');
+        }
+
+        $validated = $request->validate([
+            'video_id' => 'required|exists:videos,id',
+        ]);
+
+        $serie->videos()->detach($validated['video_id']);
+
+        return redirect()->back()->with('success', 'Vídeo desassignat correctament.');
     }
 }

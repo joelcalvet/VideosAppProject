@@ -22,6 +22,8 @@ class PermissionSeeder extends Seeder
             'delete videos',
             'manage users',
             'manage series',
+            'create videos',
+            'view-notification',
         ];
 
         foreach ($permissions as $permission) {

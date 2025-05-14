@@ -31,9 +31,15 @@ class Video extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getUserNameAttribute()
+    {
+        return $this->user ? $this->user->name : null;
+    }
+
     public function series(): BelongsToMany
     {
-        return $this->belongsToMany(Serie::class, 'serie_video', 'serie_id', 'video_id');
+        return $this->belongsToMany(Serie::class, 'serie_video', 'video_id', 'serie_id');
     }
 
     public function getFormattedPublishedAtAttribute()
