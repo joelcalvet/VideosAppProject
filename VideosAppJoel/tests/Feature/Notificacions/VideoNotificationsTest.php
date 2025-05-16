@@ -64,48 +64,61 @@ class VideoNotificationsTest extends TestCase
         Notification::fake();
         Mail::fake();
 
-        $admin = $this->loginAsSuperAdmin();
+        // Crear un super‑admin
+        $admin = UserHelper::create_superadmin_user();
         $admin->assignRole('super-admin');
 
-        $creator = $this->loginAsRegularUser();
+        // Crear el creator i un altre usuari “normal”
+        $creator  = UserHelper::create_regular_user();
         $otherUser = UserHelper::create_regular_user();
 
-        $video = Video::create([
-            'title' => 'Test Video',
-            'description' => 'This is a test video description.',
-            'url' => 'https://www.youtube.com/watch?v=abc123',
-            'published_at' => Carbon::now(),
-            'user_id' => $creator->id,
-        ]);
+        // Actuar com a creator quan creem el vídeo
+        $this->actingAs($creator);
 
+        $video = Video::create([
+            'title'        => 'Test Video',
+            'description'  => 'This is a test video description.',
+            'url'          => 'https://www.youtube.com/watch?v=abc123',
+            'published_at' => Carbon::now(),
+            'user_id'      => $creator->id,
+        ]);
+        $video->load('user');
+
+        // Disparar l'event
         event(new VideoCreated($video));
 
-        // Verifica que l'administrador rep notificació per correu i base de dades
+        // 1) L’admin rep mail + database
         Notification::assertSentTo(
-            [$admin],
+            $admin,
             VideoCreatedNotification::class,
             function ($notification, $channels) use ($video) {
-                return in_array('mail', $channels) &&
-                    in_array('database', $channels) &&
-                    $notification->video->id === $video->id;
+                return in_array('mail', $channels)
+                    && in_array('database', $channels)
+                    && $notification->video->id === $video->id;
             }
         );
 
-        // Verifica que el creador rep notificació només a la base de dades
+        // 2) El creador rep només database
         Notification::assertSentTo(
-            [$creator],
+            $creator,
             VideoCreatedNotification::class,
             function ($notification, $channels) use ($video) {
-                return in_array('database', $channels) &&
-                    !in_array('mail', $channels) &&
-                    $notification->video->id === $video->id;
+                return in_array('database', $channels)
+                    && ! in_array('mail', $channels)
+                    && $notification->video->id === $video->id;
             }
         );
 
-        // Verifica que altres usuaris no reben notificacions
-        Notification::assertNotSentTo(
-            [$otherUser],
-            VideoCreatedNotification::class
+        // 3) Altres usuaris “normal” (otherUser) també reben només database
+        Notification::assertSentTo(
+            $otherUser,
+            VideoCreatedNotification::class,
+            function ($notification, $channels) use ($video) {
+                return in_array('database', $channels)
+                    && ! in_array('mail', $channels)
+                    && $notification->video->id === $video->id;
+            }
         );
     }
+
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Video;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,8 +40,6 @@ class NotificationController extends Controller
         return view('notificacions', compact('notifications'));
     }
 
-
-
     public function markAsRead($id)
     {
         $notification = DatabaseNotification::findOrFail($id);
@@ -53,12 +52,6 @@ class NotificationController extends Controller
         return redirect()->back()->with('success', 'Notificació marcada com a llegida.');
     }
 
-    public function markAllAsRead()
-    {
-        auth()->user()->unreadNotifications->markAsRead();
-
-        return redirect()->back()->with('success', 'Totes les notificacions marcades com a llegides.');
-    }
 }
 
 

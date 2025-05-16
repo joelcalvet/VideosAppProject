@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\VideoCreated;
 use Illuminate\Http\Request;
 use App\Models\Video;
 
@@ -25,9 +26,22 @@ class VideosManageController extends Controller
             'description' => 'nullable|string',
             'url' => 'required|url',
             'published_at' => 'nullable|date',
+            'serie_id' => 'nullable|exists:series,id',
         ]);
 
-        Video::create($validated);
+        $video = Video::create([
+            'title' => $validated['title'],
+            'description' => $validated['description'] ?? null,
+            'url' => $validated['url'],
+            'published_at' => $validated['published_at'] ?? null,
+            'user_id' => auth()->id(),
+        ]);
+
+        event(new \App\Events\VideoCreated($video));
+
+        if (!empty($validated['serie_id'])) {
+            $video->series()->syncWithoutDetaching([$validated['serie_id']]);
+        }
 
         return redirect()->route('videos.manage.index')
             ->with('success', 'Vídeo creat correctament.');

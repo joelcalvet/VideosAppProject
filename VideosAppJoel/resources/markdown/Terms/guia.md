@@ -367,3 +367,63 @@ En aquest sprint, he treballat en les següents tasques per avançar en el desen
 - **Comprovació amb Larastan:** He verificat tots els fitxers creats amb **Larastan** per assegurar-me que no hi ha errors d’anàlisi estàtica.
 
 ---
+
+---
+
+## Sprint 7: Gestió avançada de sèries i vídeos
+
+### Objectius
+- Implementar un sistema complet per gestionar sèries de vídeos.
+- Permetre la gestió CRUD de sèries per als usuaris amb permisos.
+- Enllaçar vídeos amb sèries i gestionar les relacions 1:N.
+- Millorar la UX de la gestió de vídeos amb botons i controls addicionals.
+
+### Activitats
+
+#### Gestió de sèries
+- Creació de la migració per a la taula `series` amb camps:
+    - `id`, `title`, `description`, `image` (nullable), `user_name`, `user_photo_url` (nullable), `published_at` (nullable).
+- Desenvolupament del model `Serie` amb funcions:
+    - `testedBy()`
+    - Relació `videos()` (1:N)
+    - Accessors per a formats de data: `getFormattedCreatedAtAttribute()`, `getFormattedForHumansCreatedAtAttribute()`, `getCreatedAtTimestampAttribute()`.
+- Afegida la relació 1:N al model `Video` per connectar amb sèries.
+
+#### Controladors de sèries
+- Creació de `SeriesManageController` amb mètodes:
+    - `testedBy()`
+    - `index()`
+    - `store()`
+    - `edit()`
+    - `update()`
+    - `delete()`
+    - `destroy()`
+- Creació de `SeriesController` amb funcions:
+    - `index()`
+    - `show()`
+
+#### Helpers i dades inicials
+- Implementació de la funció `create_series()` a Helpers per crear tres sèries inicials per a la base de dades.
+
+#### Vistes per a sèries
+- Desenvolupament de vistes CRUD sota `resources/views/series/manage/` accessibles només a usuaris amb permisos:
+    - `index.blade.php` (taula per llistat i gestió)
+    - `create.blade.php` (formulari amb atribut `data-qa`)
+    - `edit.blade.php`
+    - `delete.blade.php` (confirmació d’eliminació)
+- Afegida la taula CRUD de sèries a la vista principal `index.blade.php`.
+
+#### Gestió de vídeos
+- Modificació del `VideoController` per permetre que usuaris regulars puguin crear vídeos.
+- Afegits botons per CRUD a la vista de vídeos per facilitar la gestió.
+- Relacionar vídeos amb sèries i mostrar aquesta informació a la interfície.
+
+---
+
+### Resum del Sprint 7
+
+- Implementat un sistema complet per a la gestió de sèries i la seva associació amb vídeos.
+- Controladors, models i vistes CRUD desenvolupats per a sèries, amb controls d’accés segons permisos.
+- Millorada la gestió de vídeos amb la possibilitat de crear i editar vídeos vinculats a sèries.
+- Creada funcionalitat de dades inicials per poblar sèries per defecte.
+

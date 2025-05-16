@@ -100,5 +100,4 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name
 Route::middleware('auth')->group(function () {
     Route::get('/notificacions', [NotificationController::class, 'index'])->name('notificacions');
     Route::post('/notificacions/read/{id}', [NotificationController::class, 'markAsRead'])->name('notificacions.read');
-    Route::post('/notificacions/read-all', [NotificationController::class, 'markAllAsRead'])->name('notificacions.readAll');
 });

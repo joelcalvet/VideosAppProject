@@ -35,10 +35,4 @@
             <p>No tens notificacions.</p>
         @endforelse
     </div>
-
-    <form action="{{ route('notificacions.readAll') }}" method="POST">
-        @csrf
-        <button type="submit" class="btn btn-warning mt-3">Marcar totes com a llegides</button>
-    </form>
-
 @endsection
