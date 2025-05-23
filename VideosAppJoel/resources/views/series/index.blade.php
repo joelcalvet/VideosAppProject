@@ -7,37 +7,35 @@
 
 @section('content')
     <div class="container py-4">
-        <h1 class="text-2xl font-bold mb-6 text-gray-800 text-center">Llista de Sèries</h1>
-        <div class="mb-4 text-center">
-            <a href="{{ route('series.create') }}" class="btn btn-primary">Crear Sèrie</a>
+        <h1 class="text-[var(--font-size-xl)] font-bold mb-6 text-[var(--color-text)] text-center">Llista de Sèries</h1>
+
+        <div class="mb-16 text-center">
+            <x-ui.button href="{{ route('series.create') }}" color="primary">
+                Crear Sèrie
+            </x-ui.button>
         </div>
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-            @forelse ($series as $serie)
-                <div class="col">
-                    <div class="bg-white overflow-hidden shadow-sm rounded-lg h-100">
-                        <div class="p-4 flex flex-col">
-                            <a href="{{ route('series.show', $serie->id) }}" class="text-decoration-none">
-                                <h5 class="text-lg font-semibold text-gray-800 mb-2 hover:text-blue-600">
-                                    {{ Str::limit($serie->title, 50) }}
-                                </h5>
-                                <p class="text-sm text-gray-600 flex-grow-1">
-                                    {{ Str::limit($serie->description, 100) }}
-                                </p>
-                                <p class="text-xs text-gray-500 mt-2">
-                                    Publicat: {{ $serie->published_at ? Carbon::parse($serie->published_at)->diffForHumans() : 'No publicat' }}
-                                </p>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            @empty
-                <div class="col-12 text-center">
-                    <p class="text-gray-600">No hi ha sèries disponibles.</p>
-                </div>
-            @endforelse
-        </div>
-        <div class="mt-4">
-            {{ $series->links() }}
-        </div>
+
+        @if($series->count())
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                @foreach ($series as $serie)
+                    <x-ui.card :title="Str::limit($serie->title, 50)">
+                        <a href="{{ route('series.show', $serie->id) }}" class="block hover:text-[var(--color-primary)] transition-colors duration-200">
+                            <p>{{ Str::limit($serie->description, 100) }}</p>
+                            <p class="text-sm text-[var(--color-muted)] mt-2">
+                                Publicat: {{ $serie->published_at ? Carbon::parse($serie->published_at)->diffForHumans() : 'No publicat' }}
+                            </p>
+                        </a>
+                    </x-ui.card>
+                @endforeach
+            </div>
+
+            <div class="mt-8">
+                {{ $series->links() }}
+            </div>
+        @else
+            <div class="text-center text-[var(--color-muted)] text-[var(--font-size-base)]">
+                No hi ha sèries disponibles.
+            </div>
+        @endif
     </div>
 @endsection

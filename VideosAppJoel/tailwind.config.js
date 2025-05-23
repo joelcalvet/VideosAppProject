@@ -18,17 +18,16 @@ export default {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
             colors: {
-                // Colors base per a temes
                 primary: {
-                    DEFAULT: 'var(--color-primary)',
-                    light: 'var(--color-primary-light)',
-                    dark: 'var(--color-primary-dark)',
+                    DEFAULT: 'rgb(var(--color-primary) / <alpha-value>)',
+                    light: 'rgb(var(--color-primary-light) / <alpha-value>)',
+                    dark: 'rgb(var(--color-primary-dark) / <alpha-value>)',
                 },
                 text: {
-                    DEFAULT: 'var(--color-text)',
-                    muted: 'var(--color-text-muted)',
+                    DEFAULT: 'rgb(var(--color-text) / <alpha-value>)',
+                    muted: 'rgb(var(--color-text-muted) / <alpha-value>)',
                 },
-                background: 'var(--color-background)',
+                background: 'rgb(var(--color-background) / <alpha-value>)',
             },
             borderRadius: {
                 DEFAULT: 'var(--radius)',

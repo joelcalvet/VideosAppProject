@@ -6,15 +6,15 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Aplicació de Vídeos')</title>
 
-    <!-- CDNs (sense canvis) -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- CDNs -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css" rel="stylesheet">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
-        /* Estils actualitzats amb consistència */
+        /* Estils actualitzats */
         body {
             background-color: #f8f9fa;
             font-family: 'Arial', sans-serif;
@@ -22,12 +22,13 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            font-size: 16px; /* Base size */
+            font-size: 16px;
             line-height: 1.5;
             color: #333;
+            padding-bottom: 70px;
         }
 
-        /* Navbar consistent */
+        /* Navbar millorada */
         .navbar {
             background-color: #343a40;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -35,28 +36,47 @@
         }
 
         .navbar-brand {
-            font-size: 1.25rem; /* 20px */
+            font-size: 1.25rem;
             font-weight: 600;
             color: #ffffff !important;
-            transition: color 0.2s ease;
         }
 
         .nav-link {
-            font-size: 1rem; /* 16px */
+            font-size: 1rem;
             padding: 0.5rem 1rem !important;
             color: #ffffff !important;
-            transition: color 0.2s ease;
         }
 
         .navbar-brand:hover, .nav-link:hover {
             color: #cccccc !important;
         }
 
+        /* Menú desplegable fixat - SOLUCIÓ DEFINITIVA */
+        @media (max-width: 991.98px) {
+            .navbar-collapse {
+                position: fixed;
+                top: 56px;
+                left: 0;
+                right: 0;
+                background-color: #343a40;
+                padding: 1rem;
+                z-index: 1000;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                max-height: calc(100vh - 56px);
+                overflow-y: auto;
+                transition: none !important;
+            }
+
+            /* Evita el parpadeig */
+            .navbar-collapse:not(.show) {
+                display: none !important;
+            }
+        }
+
         /* Contingut principal */
         main {
-            flex: 1 0 auto;
+            flex: 1;
             padding: 2rem 0;
-            margin-bottom: 70px; /* Espai per al footer */
         }
 
         .container {
@@ -64,7 +84,7 @@
             padding: 0 1.5rem;
         }
 
-        /* Footer consistent */
+        /* Footer */
         .footer {
             background-color: #343a40;
             color: #ffffff;
@@ -85,40 +105,24 @@
             padding: 0.5rem 1rem;
             cursor: pointer;
             font-size: 1rem;
-            transition: color 0.2s ease;
-        }
-
-        .btn-logout:hover {
-            color: #cccccc !important;
-        }
-
-        /* Superposició per a modals */
-        .modal-backdrop {
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1050;
         }
 
         /* Espaiat consistent */
-        .py-section {
-            padding: 3rem 0;
-        }
-
         .mb-1 { margin-bottom: 0.5rem; }
         .mb-2 { margin-bottom: 1rem; }
         .mb-3 { margin-bottom: 1.5rem; }
-        .mb-4 { margin-bottom: 2rem; }
     </style>
 </head>
 <body>
 
-<!-- Barra de navegació (sense canvis estructurals) -->
+<!-- Barra de navegació -->
 <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
         <a class="navbar-brand" href="{{ route('videos.index') }}">Vídeos App</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" id="navbarToggler">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
+        <div class="navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item"><a class="nav-link" href="{{ route('videos.index') }}">Vídeos</a></li>
                 @auth
@@ -160,56 +164,89 @@
     </div>
 </footer>
 
-<!-- Scripts (sense canvis) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
 
-@auth
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const userId = {{ auth()->id() }};
-            const isSuperAdmin = {{ auth()->user()->hasRole('super-admin') ? 'true' : 'false' }};
+<script>
+    // SOLUCIÓ DEFINITIVA PER AL MENÚ
+    document.addEventListener('DOMContentLoaded', function() {
+        const navbarToggler = document.getElementById('navbarToggler');
+        const navbarCollapse = document.getElementById('navbarNav');
 
-            toastr.options = {
-                closeButton: true,
-                progressBar: true,
-                positionClass: 'toast-top-right',
-                timeOut: 5000
-            };
+        // Control manual del menú
+        navbarToggler.addEventListener('click', function() {
+            navbarCollapse.classList.toggle('show');
 
-            function appendNotification(video, type = 'success') {
-                const notificationDiv = document.createElement('div');
-                notificationDiv.classList.add('alert', `alert-${type}`);
-                notificationDiv.innerHTML = `<strong>${video.title}</strong><div>Creat per ${video.creator_name}</div>`;
-
-                const container = document.getElementById('notifications');
-                if (container) {
-                    container.prepend(notificationDiv);
+            // Tanca altres menús oberts
+            document.querySelectorAll('.navbar-collapse.show').forEach(function(menu) {
+                if (menu !== navbarCollapse) {
+                    menu.classList.remove('show');
                 }
-            }
+            });
+        });
 
-            if (window.Echo) {
-                if (isSuperAdmin) {
-                    window.Echo.private('videos.admin')
-                        .listen('.VideoCreated', (e) => {
-                            console.log('[Admin] Event rebut:', e);
-                            toastr.info(`Nou vídeo creat: ${e.video.title} per ${e.video.creator_name}`, 'Notificació Admin');
-                            appendNotification(e.video, 'info');
-                        });
+        // Tanca el menú en fer clic a un enllaç (només en mòbil)
+        document.querySelectorAll('.nav-link').forEach(function(link) {
+            link.addEventListener('click', function() {
+                if (window.innerWidth < 992) {
+                    navbarCollapse.classList.remove('show');
                 }
+            });
+        });
 
-                window.Echo.private(`videos.user.${userId}`)
-                    .listen('.VideoCreated', (e) => {
-                        console.log('[Usuari] Event rebut:', e);
-                        toastr.success(`Nou vídeo creat: ${e.video.title} per ${e.video.creator_name}`, 'Notificació Personal');
-                        appendNotification(e.video, 'success');
-                    });
-            } else {
-                console.error('Laravel Echo no està carregat.');
+        // Tanca el menú en fer clic fora
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.navbar') && !event.target.closest('.navbar-collapse')) {
+                navbarCollapse.classList.remove('show');
             }
         });
-    </script>
-@endauth
+
+        // La resta del teu codi existent
+        @auth
+        const userId = {{ auth()->id() }};
+        const isSuperAdmin = {{ auth()->user()->hasRole('super-admin') ? 'true' : 'false' }};
+
+        toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            positionClass: 'toast-top-right',
+            timeOut: 5000
+        };
+
+        function appendNotification(video, type = 'success') {
+            const notificationDiv = document.createElement('div');
+            notificationDiv.classList.add('alert', `alert-${type}`);
+            notificationDiv.innerHTML = `<strong>${video.title}</strong><div>Creat per ${video.creator_name}</div>`;
+
+            const container = document.getElementById('notifications');
+            if (container) {
+                container.prepend(notificationDiv);
+            }
+        }
+
+        if (window.Echo) {
+            if (isSuperAdmin) {
+                window.Echo.private('videos.admin')
+                    .listen('.VideoCreated', (e) => {
+                        console.log('[Admin] Event rebut:', e);
+                        toastr.info(`Nou vídeo creat: ${e.video.title} per ${e.video.creator_name}`, 'Notificació Admin');
+                        appendNotification(e.video, 'info');
+                    });
+            }
+
+            window.Echo.private(`videos.user.${userId}`)
+                .listen('.VideoCreated', (e) => {
+                    console.log('[Usuari] Event rebut:', e);
+                    toastr.success(`Nou vídeo creat: ${e.video.title} per ${e.video.creator_name}`, 'Notificació Personal');
+                    appendNotification(e.video, 'success');
+                });
+        } else {
+            console.error('Laravel Echo no està carregat.');
+        }
+        @endauth
+    });
+</script>
 
 @stack('scripts')
 
