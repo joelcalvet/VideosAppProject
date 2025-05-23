@@ -9,6 +9,7 @@ export default {
         './vendor/laravel/jetstream/**/*.blade.php',
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
+        './app/Livewire/**/*.php',
     ],
 
     theme: {
@@ -16,8 +17,39 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                // Colors base per a temes
+                primary: {
+                    DEFAULT: 'var(--color-primary)',
+                    light: 'var(--color-primary-light)',
+                    dark: 'var(--color-primary-dark)',
+                },
+                text: {
+                    DEFAULT: 'var(--color-text)',
+                    muted: 'var(--color-text-muted)',
+                },
+                background: 'var(--color-background)',
+            },
+            borderRadius: {
+                DEFAULT: 'var(--radius)',
+            },
+            boxShadow: {
+                DEFAULT: 'var(--shadow)',
+                sm: 'var(--shadow-sm)',
+                md: 'var(--shadow-md)',
+                lg: 'var(--shadow-lg)',
+            },
+            fontSize: {
+                base: 'var(--font-size-base)',
+                lg: 'var(--font-size-lg)',
+                xl: 'var(--font-size-xl)',
+            },
         },
     },
 
-    plugins: [forms, typography],
+    plugins: [
+        forms,
+        typography,
+        require('@tailwindcss/aspect-ratio'),
+    ],
 };

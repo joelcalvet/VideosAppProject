@@ -147,5 +147,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="ionic_videos_app_joel" />
     <orderEntry type="library" name="toastr" level="application" />
+    <orderEntry type="library" name="alpinejs" level="application" />
   </component>
 </module>

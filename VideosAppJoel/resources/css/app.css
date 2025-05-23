@@ -5,3 +5,56 @@
 [x-cloak] {
     display: none;
 }
+
+:root {
+    --color-primary: #3b82f6;
+    --color-primary-light: #93c5fd;
+    --color-primary-dark: #1d4ed8;
+    --color-text: #1f2937;
+    --color-text-muted: #6b7280;
+    --color-background: #ffffff;
+    --radius: 0.5rem;
+    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+}
+
+.dark {
+    --color-text: #f3f4f6;
+    --color-text-muted: #9ca3af;
+    --color-background: #111827;
+}
+
+/* Animacions per als missatges */
+.fade-enter-active, .fade-leave-active {
+    transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to {
+    opacity: 0;
+}
+
+/* Estils per als missatges d'error */
+.bg-red-100 {
+    background-color: #fee2e2;
+}
+.text-red-800 {
+    color: #991b1b;
+}
+
+/* Estils per als missatges d'èxit */
+.bg-green-100 {
+    background-color: #dcfce7;
+}
+.text-green-800 {
+    color: #166534;
+}
+
+@layer base {
+    .btn {
+        @apply normal-case;
+    }
+}
